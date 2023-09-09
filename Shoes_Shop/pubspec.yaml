@@ -71,6 +71,9 @@ flutter:
     - assets/images/ellipse.svg
     - assets/images/highlight_1.svg
     - assets/images/Misc_1.svg
+    - assets/images/shoes_onbroad2.png
+    - assets/images/shoes_onboard1_1.png
+    - assets/images/shoes_onboard3.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
