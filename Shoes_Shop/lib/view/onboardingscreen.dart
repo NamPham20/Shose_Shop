@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:onboarding/onboarding.dart';
+import 'package:shoes_shop/view/signIn_screen.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key, required String title});
@@ -18,7 +19,7 @@ class OnboardingState extends State<OnboardingScreen> {
     index = 0;
   }
 
-  final onboardingPageLists = [
+   List<PageModel> onboardingPageLists = [
     PageModel(
       widget: DecoratedBox(
         decoration: BoxDecoration(
@@ -102,17 +103,6 @@ class OnboardingState extends State<OnboardingScreen> {
               ],
             ),
             const SizedBox(height: 30,),
-            Container(
-              margin: const EdgeInsets.only(left: 100,right: 100, bottom: 30),
-              child: Row(
-                  children: [
-                    Expanded(
-                      child: ElevatedButton(
-                          onPressed: () {}, child: const Text('Get Started')),
-                    ),
-                  ],
-              ),
-            ),
           ],
         ),
       ),
@@ -211,18 +201,7 @@ class OnboardingState extends State<OnboardingScreen> {
               ],
             ),
             const SizedBox(
-              height: 30,
-            ),
-            Container(
-              margin: const EdgeInsets.only(left: 100,right: 100, bottom: 30),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: ElevatedButton(
-                        onPressed: () {}, child: const Text('Next')),
-                  ),
-                ],
-              ),
+              height: 75,
             ),
           ],
         ),
@@ -241,59 +220,61 @@ class OnboardingState extends State<OnboardingScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const SizedBox(height: 100,),
+            const SizedBox(height: 20,),
             Stack(
               clipBehavior: Clip.none,
               alignment: Alignment.center,
               children: [
                 Positioned(
-                    top: 300,
+                    top: 390,
                     child: SvgPicture.asset(
                         'assets/images/vector_nike_after_image.svg')),
                 Image.asset('assets/images/shoes_onbroard3.png'),
                 Positioned(
-                    top: 250,
-                    left: 30,
+                    top: 350,
+                    left: 60,
                     child: SvgPicture.asset('assets/images/ellipse.svg')),
                 Positioned(
                     top: 150,
                     left: 30,
                     child: SvgPicture.asset('assets/images/Misc_1.svg')),
                 Positioned(
-                    top: 0,
-                    left: 40,
+                    top: 250,
+                    right: 30,
                     child: SvgPicture.asset('assets/images/highlight_1.svg')),
+                Positioned(
+                  top: 460,
+                  child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SvgPicture.asset('assets/images/Highlight_text.svg'),
+                    const Column(
+                      children: [
+                        Text(
+                          'You Have the',
+                          style: TextStyle(
+                              fontSize: 40,
+                              color: Colors.white,
+                              fontFamily: 'Raceway',
+                              fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          'Power To',
+                          style: TextStyle(
+                              fontSize: 40,
+                              color: Colors.white,
+                              fontFamily: 'Raceway',
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    )
+                  ],
+                ),)
               ],
             ),
             const SizedBox(
               height: 100,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SvgPicture.asset('assets/images/Highlight_text.svg'),
-                const Column(
-                  children: [
-                    Text(
-                      'Let’s Start Journey',
-                      style: TextStyle(
-                          fontSize: 40,
-                          color: Colors.white,
-                          fontFamily: 'Raceway',
-                          fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      'With Nike',
-                      style: TextStyle(
-                          fontSize: 40,
-                          color: Colors.white,
-                          fontFamily: 'Raceway',
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                )
-              ],
             ),
             const Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -302,7 +283,7 @@ class OnboardingState extends State<OnboardingScreen> {
                 Column(
                   children: [
                     Text(
-                      'Smart, Gorgeous & Fashionable',
+                      'There Are Many Beautiful And Attractive ',
                       style: TextStyle(
                         fontSize: 20,
                         color: Colors.white,
@@ -310,7 +291,7 @@ class OnboardingState extends State<OnboardingScreen> {
                       ),
                     ),
                     Text(
-                      'Collection Explor Now',
+                      'Plants To Your Room',
                       style: TextStyle(
                         fontSize: 20,
                         color: Colors.white,
@@ -322,18 +303,7 @@ class OnboardingState extends State<OnboardingScreen> {
               ],
             ),
             const SizedBox(
-              height: 30,
-            ),
-            Container(
-              margin: const EdgeInsets.only(left: 100,right: 100, bottom: 30),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: ElevatedButton(
-                        onPressed: () {}, child: const Text('Next')),
-                  ),
-                ],
-              ),
+              height: 75,
             ),
           ],
         ),
@@ -350,7 +320,55 @@ class OnboardingState extends State<OnboardingScreen> {
           index = pageIndex;
         },
         startPageIndex: 0,
+        footerBuilder: (context, dragDistance, pagesLength, setIndex) {
+          return DecoratedBox(
+            decoration: BoxDecoration(
+              color: const Color.fromRGBO(20, 131, 194, 1),
+              border: Border.all(
+                width: 0.0,
+                color: const Color.fromRGBO(20, 131, 194, 1),
+              ),
+            ),
+            child: ColoredBox(
+              color: const Color.fromRGBO(20, 131, 194, 1),
+              child: Padding(
+                padding: const EdgeInsets.all(25),
+                child:
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                         Expanded(child: CustomIndicator(
+                             netDragPercent: dragDistance,
+                             pagesLength: pagesLength,
+                             indicator: Indicator(
+                               indicatorDesign: IndicatorDesign.polygon(
+                                 polygonDesign: PolygonDesign(
+                                   polygon: DesignType.polygon_arrow,
+                                 ),
+                               ),
+                             )
+                         ),),
+                        (index == pagesLength - 1)?
+                            Expanded(child: signUpButton())
+                            :const Expanded(child: SizedBox(width: 20,))
+                      ],
+                    ),
+                ),
+              ),
+
+          );
+        },
       ),
+    );
+  }
+  signUpButton(){
+    return ElevatedButton(onPressed: () {
+      Navigator.push(context, MaterialPageRoute(builder: (context) =>const SignInScreen() ));
+    },
+      child: const Text('SIGN UP',style: TextStyle(
+        fontSize: 25,
+        fontWeight: FontWeight.bold
+      ),) ,
     );
   }
 }
