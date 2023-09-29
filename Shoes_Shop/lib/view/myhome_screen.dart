@@ -1,8 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
+import 'package:shoes_shop/view/infor_product.dart';
 
 import '../model/product.dart';
 import '../network/network_request.dart';
@@ -16,17 +16,17 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
 
+  Set<String> setMenu = <String>{};
+
  List<Menu> menuList=[
-   Menu('ALl Shoes', true),
-   Menu('Outdoor', false),
-   Menu('Tennis', false),
-   Menu('Football', false),
-   Menu('Fashion', false)];
+   Menu('All Products', true),
+   ];
 
  List<Product> productList = [];
  bool isLoading = true;
  List<bool> isClickHeartList = [];
- int curentIndex=0;
+ int currentIndex=0;
+  List<Product> productListCurrent = [];
  @override
   initState()  {
     // TODO: implement initState
@@ -36,283 +36,309 @@ class _HomeScreenState extends State<HomeScreen> {
         productList =value;
         isLoading = false;
         isClickHeartList=List.generate(productList.length, (index) => false);
+        productListCurrent.addAll(productList) ;
+        for(Product product in productList ){
+          setMenu.add(product.category.toString().trim());
+        }
+        for(String setM in setMenu){
+          menuList.add(Menu(setM, false));
+        }
       });
     });
+
  }
 
 
   @override
    build(BuildContext context)  {
-   print('build sucess');
     return KeyboardDismisser(
       gestures: const [GestureType.onTap, GestureType.onPanUpdateDownDirection],
       child: SafeArea(child: Scaffold(
-        body: Container(
-          margin: const EdgeInsets.only(right: 15,left: 15),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const SizedBox(height: 10,),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    RawMaterialButton(
-                      onPressed: () {},
-                      elevation: 0.1,
-                      padding: const EdgeInsets.all(10.0),
-                      shape: const CircleBorder(),
-                      child: SvgPicture.asset('assets/images/hamburger.svg'),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SvgPicture.asset('assets/images/highlight_text_black.svg'),
-                        const Column(
-                          children: [
-                            Text(
-                              'Explore',
-                              style: TextStyle(
-                                  fontSize: 40,
-                                  color: Colors.black,
-                                  fontFamily: 'Raceway',
-                                  fontWeight: FontWeight.bold),
+        appBar: AppBar(
+          centerTitle: true,
+          backgroundColor: Colors.white,
+          elevation: 0,
+          leading: RawMaterialButton(
+            onPressed: () {},
+            elevation: 0.1,
+            padding: const EdgeInsets.all(10.0),
+            shape: const CircleBorder(),
+            child: SvgPicture.asset('assets/images/hamburger.svg'),
+          ),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SvgPicture.asset('assets/images/highlight_text_black.svg'),
+              const Column(
+                children: [
+                  Text(
+                    'Explore',
+                    style: TextStyle(
+                        fontSize: 40,
+                        color: Colors.black,
+                        fontFamily: 'Raceway',
+                        fontWeight: FontWeight.bold),
+                  ),
+                ],
+              )
+            ],
+          ),
+          actions: [
+            RawMaterialButton(
+              onPressed: () {},
+              elevation: 2,
+              fillColor: Colors.white,
+              padding: const EdgeInsets.all(10.0),
+              shape: const CircleBorder(),
+              child: SvgPicture.asset('assets/images/bag-2.svg'),
+            ),
+          ],
+        ),
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.only(left: 20, right: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const SizedBox(height: 5,),
+              Row(
+                children: [
+                    Container(
+                      width:  MediaQuery.of(context).size.width-100,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20.0),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.3),
+                            spreadRadius: 1,
+                            blurRadius: 2,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                        child: TextField(
+                          decoration: InputDecoration(
+                            filled: true,
+                            fillColor: Colors.white,
+                            hintText: 'Search',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20.0),
+                              borderSide: BorderSide.none,
                             ),
-                          ],
-                        )
-                      ],
-                    ),
-                    RawMaterialButton(
+                            prefixIcon: const Icon(Icons.search),
+                          ),
+                        ),
+                      ),
+                  const SizedBox(width: 5,),
+                  Expanded(
+                    child: RawMaterialButton(
                       onPressed: () {},
                       elevation: 2,
-                      fillColor: Colors.white,
-                      padding: const EdgeInsets.all(10.0),
+                      fillColor: Colors.blueAccent,
+                      padding: const EdgeInsets.all(15.0),
                       shape: const CircleBorder(),
-                      child: SvgPicture.asset('assets/images/bag-2.svg'),
+                      child: SvgPicture.asset('assets/images/sliders.svg'),
                     ),
-                  ],
-                ),
-                const SizedBox(height: 15,),
-                GestureDetector(
-                  onTap: (){
-                    FocusScope.of(context).unfocus();
-                  },
-                  child: Row(
-                    children: [
-                        Container(
-                          width:  MediaQuery.of(context).size.width-100,
+                  ),
+                ],
+              ),
+               const SizedBox(height: 15,),
+               const Row(
+                 children: [
+                   Text('Select Category',style: TextStyle(
+                     fontSize: 20,
+                     fontWeight: FontWeight.w500
+                   ),),
+                 ],
+               ),
+              SizedBox(
+                height: 90,
+                width: MediaQuery.of(context).size.width,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: menuList.length,
+                    itemBuilder: (context,index) => GestureDetector (
+                      onTap: (){
+                        setState(() {
+                          for(Menu menu in menuList){
+                            menu.isClick=false;
+                          }
+                          menuList[index].isClick= true;
+                          productListCurrent.clear();
+                          if(menuList[index].name == 'All Products'){
+                            print('all product is called');
+                            productListCurrent.addAll(productList);
+                          }else {
+                            print('other products is called');
+                            for (Product product in productList) {
+                              if (product.category.toString().trim() ==
+                                  menuList[index].name.toString().trim()) {
+                                productListCurrent.add(product);
+                              }
+                            }
+                          }
+                        });
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.only(left: 5,right: 20,top: 20,bottom: 25),
+                        child: Container(
+                          width: 100,
+                          padding: const EdgeInsets.only(left: 10,right: 10),
+                          alignment: Alignment.center,
                           decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(20.0),
+                            color: menuList[index].isClick==false? Colors.white :Colors.blueAccent,
+                            borderRadius: BorderRadius.circular(15.0),
                             boxShadow: [
                               BoxShadow(
                                 color: Colors.grey.withOpacity(0.3),
-                                spreadRadius: 1,
-                                blurRadius: 2,
-                                offset: const Offset(0, 2),
+                                spreadRadius: 0,
+                                blurRadius: 7,
+                                offset: const Offset(0, 3),
                               ),
                             ],
                           ),
-                            child: TextField(
-                              decoration: InputDecoration(
-                                filled: true,
-                                fillColor: Colors.white,
-                                hintText: 'Search',
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(20.0),
-                                  borderSide: BorderSide.none,
-                                ),
-                                prefixIcon: const Icon(Icons.search),
-                              ),
-                            ),
-                          ),
-                      Expanded(
-                        child: RawMaterialButton(
-                          onPressed: () {},
-                          elevation: 2,
-                          fillColor: Colors.blueAccent,
-                          padding: const EdgeInsets.all(15.0),
-                          shape: const CircleBorder(),
-                          child: SvgPicture.asset('assets/images/sliders.svg'),
-                        ),
+                          child: Text(menuList[index].name,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                             color: menuList[index].isClick==false? Colors.black:Colors.white
+                          ),),
+                        )
                       ),
-                    ],
-                  ),
-                ),
-                 const SizedBox(height: 15,),
-                 const Row(
-                   children: [
-                     Text('Select Category',style: TextStyle(
-                       fontSize: 20,
-                       fontWeight: FontWeight.w500
-                     ),),
-                   ],
-                 ),
-                const SizedBox(height: 15,),
-                SizedBox(
-                  height: 100,
-                  child: ListView.builder(
+                    )),
+              ),
+              const Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('Popular Shoes',style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500
+                  ),),
+                  Text('See all',style: TextStyle(
+                      fontSize:15,
+                      color: Colors.blueAccent,
+                      decoration: TextDecoration.underline,
+                      decorationColor: Colors.blueAccent
+                  ),)
+                ],
+              ),
+              SizedBox(
+                height: 400,
+                child: ListView.builder(
                     scrollDirection: Axis.horizontal,
-                    itemCount: menuList.length,
-                      itemBuilder: (context,index) => GestureDetector (
-                        onTap: (){
-                          setState(() {
-                            for(Menu menu in menuList){
-                              menu.isClick=false;
-                            }
-                            menuList[index].isClick= true;
-
-                          });
-                        },
+                    itemCount: productListCurrent.length,
+                    itemBuilder: (context,index) => Container(
+                        margin: const EdgeInsets.only(left: 5,right: 20,top: 25,bottom: 25),
                         child: Container(
-                          margin: const EdgeInsets.only(left: 5,right: 20,top: 25,bottom: 25),
-                          child: Container(
-                            padding: const EdgeInsets.only(left: 10,right: 10),
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              color: menuList[index].isClick==false? Colors.white :Colors.blueAccent,
-                              borderRadius: BorderRadius.circular(15.0),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.3),
-                                  spreadRadius: 0,
-                                  blurRadius: 7,
-                                  offset: const Offset(0, 3),
-                                ),
-                              ],
-                            ),
-                            child: Text(menuList[index].name,style: TextStyle(
-                               color: menuList[index].isClick==false? Colors.black:Colors.white
-                            ),),
-                          )
-                        ),
-                      )),
-                ),
-                const Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('Popular Shoes',style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w500
-                    ),),
-                    Text('See all',style: TextStyle(
-                        fontSize:15,
-                        color: Colors.blueAccent,
-                        decoration: TextDecoration.underline,
-                        decorationColor: Colors.blueAccent
-                    ),)
-                  ],
-                ),
-                SizedBox(
-                  height: 400,
-                  child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: productList.length,
-                      itemBuilder: (context,index) => GestureDetector (
-                        onTap: (){
-                          setState(() {
-                            
-                          });
-                        },
-                        child: Container(
-                            margin: const EdgeInsets.only(left: 5,right: 20,top: 25,bottom: 25),
-                            child: Container(
-                              padding: const EdgeInsets.only(left: 10,right: 10),
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(15.0),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey.withOpacity(0.3),
-                                    spreadRadius: 0,
-                                    blurRadius: 7,
-                                    offset: const Offset(0, 3),
-                                  ),
-                                ],
+                          padding: const EdgeInsets.only(left: 10,right: 10),
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(16.0),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.3),
+                                spreadRadius: 0,
+                                blurRadius: 7,
+                                offset: const Offset(0, 3),
                               ),
-                              child: Stack(
-                                alignment: Alignment.center,
-                                children: [
-                                  Container(
-                                    margin: const EdgeInsets.only(top: 10,left: 15,right: 15),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        isLoading ? const SizedBox(
-                                          width: 100,
-                                          height: 100,
-                                          child: CircularProgressIndicator(),
-                                        )
-                                            : Image.network(
-                                          productList[index].image.toString(),
-                                          width: 200,
-                                          height: 250,
-                                          fit: BoxFit.cover,
+                            ],
+                          ),
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              InkWell(
+                                onTap: (){
+                                  setState(() {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => const InformationProduct(),
+                                        settings: RouteSettings(
+                                          arguments: ProductInfor(productListCurrent[index],isClickHeartList[index])
                                         ),
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.start,
-                                          children: [
-                                            Text(productList[index].rating!.rate!>=4? 'Best Seller':'Normal',style: TextStyle(
-                                                 color: productList[index].rating!.rate!>=4? Colors.blue :Colors.black,
-                                                 fontWeight: FontWeight.bold
-                                            ),),
-                                          ],
-                                        ),
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.start,
-                                          children: [
-                                            Text('${productList[index].title.toString().substring(0,10)}...',style: const TextStyle(
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.w500
-                                            ),),
-                                          ],
-                                        ),
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.start,
-                                          children: [
-                                            Text('\$${productList[index].price}',style: const TextStyle(
-                                                color: Colors.redAccent,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 20
-                                            ),),
-                                          ],
-                                        )
-                                      ],
+                                      ),
+                                    );
+                                  });
+                                },
+                                child: Container(
+                                  margin: const EdgeInsets.only(top: 10,left: 15,right: 15),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      isLoading ? const SizedBox(
+                                        width: 100,
+                                        height: 100,
+                                        child: CircularProgressIndicator(),
+                                      )
+                                          : Image.network(
+                                        productListCurrent[index].image.toString(),
+                                        width: 200,
+                                        height: 250,
+                                        fit: BoxFit.contain,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        children: [
+                                          Text(productListCurrent[index].rating!.rate!>=4? 'Best Seller':'Normal',style: TextStyle(
+                                               color: productListCurrent[index].rating!.rate!>=4? Colors.blue :Colors.black,
+                                               fontWeight: FontWeight.bold
+                                          ),),
+                                        ],
+                                      ),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        children: [
+                                          Text('${productListCurrent[index].title.toString().substring(0,10)}...',style: const TextStyle(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.w500
+                                          ),),
+                                        ],
+                                      ),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        children: [
+                                          Text('\$${productListCurrent[index].price}',style: const TextStyle(
+                                              color: Colors.redAccent,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 20
+                                          ),),
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+
+                                   Positioned(
+                                      top: 5,
+                                      left: 0,
+                                      child: InkWell(
+                                          onTap: (){
+                                            setState(() {
+                                              isClickHeartList[index] =!isClickHeartList[index];
+                                            });
+                                          },child : isClickHeartList[index]? SvgPicture.asset('assets/images/heart_red.svg') : SvgPicture.asset('assets/images/heart_black.svg') )
+                                  ),
+                                Positioned(
+                                  bottom: 20,
+                                  right: 0,
+                                  child: RawMaterialButton(
+                                    onPressed: () {},
+                                    elevation: 0.1,
+                                    fillColor: Colors.blueAccent,
+                                    padding: const EdgeInsets.all(10.0),
+                                    shape: const CircleBorder(),
+                                    child: const Icon(
+                                      Icons.add,
+                                      size: 20,
+                                      color: Colors.white,
                                     ),
                                   ),
-
-                                     Positioned(
-                                        top: 5,
-                                        left: 0,
-                                        child: InkWell(
-                                            onTap: (){
-                                              setState(() {
-                                                isClickHeartList[index] =!isClickHeartList[index];
-                                              });
-                                            },child : isClickHeartList[index]? SvgPicture.asset('assets/images/heart_red.svg') : SvgPicture.asset('assets/images/heart_black.svg') )
-                                    ),
-                                  Positioned(
-                                    bottom: 20,
-                                    right: 10,
-                                    child: RawMaterialButton(
-                                      onPressed: () {},
-                                      elevation: 0.1,
-                                      fillColor: Colors.blueAccent,
-                                      padding: const EdgeInsets.all(10.0),
-                                      shape: const CircleBorder(),
-                                      child: const Icon(
-                                        Icons.add,
-                                        size: 20,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              )
+                                )
+                              ],
                             )
-                        ),
+                          )
                       )),
                 ),
                 const Row(
@@ -386,7 +412,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SizedBox(height: 20,)
               ],
             ),
-          ),
         ),
         bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
@@ -413,10 +438,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 label: ''
             )
           ],
-          currentIndex: curentIndex,
+          currentIndex: currentIndex,
           onTap: (index){
             setState(() {
-              curentIndex = index;
+              currentIndex = index;
             });
           },
         ),
@@ -432,8 +457,6 @@ class _HomeScreenState extends State<HomeScreen> {
       isLoading = false;
     });
    } catch (error) {
-     // Xử lý lỗi ở đây nếu cần thiết
-     print('Đã xảy ra lỗi: $error');
    }
  }
 
@@ -444,4 +467,11 @@ class Menu{
   var name;
   var isClick;
   Menu(this.name, this.isClick);
+}
+
+class ProductInfor{
+  Product product;
+  bool isFavorite;
+
+  ProductInfor(this.product, this.isFavorite);
 }

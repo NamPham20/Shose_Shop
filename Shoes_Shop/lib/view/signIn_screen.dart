@@ -77,7 +77,7 @@ class _SignInScreenState extends State<SignInScreen> {
               style: TextStyle(fontSize: 18),
             ),
             Container(
-              margin: const EdgeInsets.only(left: 15, right: 15),
+              margin: const EdgeInsets.only(left: 20, right: 20),
               padding: const EdgeInsets.only(top: 10, bottom: 10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -199,25 +199,24 @@ class _SignInScreenState extends State<SignInScreen> {
                       ))
                     ],
                   ),
-                  const SizedBox(height: 60,),
-                  InkWell(
-                    onTap: (){
-                      setState(() {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) =>const RegisterAcc()));
-                      });
-                    },
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('New User?',style: TextStyle(
-                          color: Colors.grey,
-                        ),),
-                        Text('Create Account',style: TextStyle(
+                  const SizedBox(height: 180,),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text('New User?',style: TextStyle(
+                        color: Colors.grey,
+                      ),),
+                      const SizedBox(width: 5,),
+                      InkWell(
+                        onTap: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (context) =>const RegisterAcc()));
+                        },
+                        child: const Text('Create Account',style: TextStyle(
                           color: Colors.black,
-                        ),)
-                      ],
+                        ),),
+                      )
+                    ],
 
-                    ),
                   )
                 ],
               ),
